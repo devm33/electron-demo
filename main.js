@@ -18,8 +18,19 @@ function createWindow () {
     console.log(details.exitCode)
   })
 
-  app.on('login', (event, webContents, details, authInfo, callback) => {
-    console.log('app received login event',event, webContents, req, authInfo);
+  app.on('login', (event, webContents, details, callback) => {
+    // Signal we handle this event on our own, otherwise
+		// Electron will ignore our provided credentials.
+		event.preventDefault();
+
+    console.log('app received login event',
+      '\nevent', event,
+      '\nwebConents', webContents,
+      '\ndetails', details,
+      // '\nauthInfo', authInfo,
+      '\ncallback', callback
+    );
+    callback('user', 'pass');
   })
   mainWindow.webContents.on('login', (event, webContents, details, authInfo, callback) => {
     console.log('webContents received login event',event, webContents, req, authInfo);
@@ -53,6 +64,7 @@ function createWindow () {
   const child = new utilityProcess.fork(path.join(__dirname, 'net-test.js'), 
         ['--test', '--test2', '--test3'], {
         // execArgv: ['--inspect-brk=9229'],
+        respondToAuthRequestsFromMainProcess: true,
         stdio: ['ignore', 'pipe', 'pipe'] // ignore, inherit, pipe
   })
   if (child.stdout) {
