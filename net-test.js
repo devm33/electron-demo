@@ -34,7 +34,9 @@ async function test() {
   //   .then((response) => console.log("fetch status", response.status));
   // await new Promise((resolve) => setTimeout(resolve, 30000));
 
-  console.log("fetch status", (await net.fetch("https://google.com")).status);
+  net.fetch("https://google.com").then((response) => {
+    console.log("utility fetch status", response.status);
+  });
 
   // console.log("net.isOnline() : ", net.isOnline());
   // console.log("net.online : ", net.online);

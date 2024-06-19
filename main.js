@@ -18,20 +18,28 @@ function createWindow () {
     console.log(details.exitCode)
   })
 
-  app.on('login', (event, webContents, details, callback) => {
+  app.on('login', (
+    event,
+    // webContents, 
+    details,
+    authInfo,
+    callback
+  ) => {
     // Signal we handle this event on our own, otherwise
-		// Electron will ignore our provided credentials.
-		event.preventDefault();
+    // Electron will ignore our provided credentials.
+    event.preventDefault();
 
     console.log('app received login event',
       '\nevent', event,
-      '\nwebConents', webContents,
+      // '\nwebConents', webContents,
       '\ndetails', details,
-      // '\nauthInfo', authInfo,
+      '\nauthInfo', authInfo,
       '\ncallback', callback
     );
+
     callback('user', 'pass');
-  })
+  });
+
   mainWindow.webContents.on('login', (event, webContents, details, authInfo, callback) => {
     console.log('webContents received login event',event, webContents, req, authInfo);
   })
